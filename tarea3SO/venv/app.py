@@ -50,6 +50,8 @@ if __name__ == '__main__':
                 os.system('touch repositorio/' + userLogged.username + '/temporal/'+nombreArchivo+'.txt')
             if action == 'U':
                 tipo = input('1.Restaurar toda la capeta 2.Algun archivo en especifico')
+
+
         action = input("Que deseas hacer? I.Iniciar sesion, R.Registrar usuario =>").upper()
         if action == 'I':
             newUser = user()
@@ -61,6 +63,7 @@ if __name__ == '__main__':
                 print(respuesta['message'])
             if respuesta['errors'] == False:
                 userLogged = newUser
+
         if action == 'R':
             newUser = user()
             newUser.username = input("Ingrese un nombre de usuario:")
