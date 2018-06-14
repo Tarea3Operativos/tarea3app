@@ -40,9 +40,7 @@ if __name__ == '__main__':
                 nombreArchivo = input('Cual archivo desea ver? => ')
                 os.system('cat repositorio/' + userLogged.username + '/temporal/' + nombreArchivo)
             if action == 'C':
-                os.system('cd repositorio/' + userLogged.username + ' git add .')
-                os.system('cd repositorio/' + userLogged.username + ' git commit -am "testing"')
-                os.system('cd repositorio/' + userLogged.username + ' git push origin master')
+                userLogged.username = '';
             if action == 'M':
                 os.system('ls repositorio/' + userLogged.username + '/temporal/')
                 nombreArchivo = input('Cual archivo desea modificar? => ')
@@ -50,6 +48,8 @@ if __name__ == '__main__':
             if action == 'A':
                 nombreArchivo = input("Digite el nombre del nuevo archivo=>")
                 os.system('touch repositorio/' + userLogged.username + '/temporal/'+nombreArchivo+'.txt')
+            if action == 'U':
+                tipo = input('1.Restaurar toda la capeta 2.Algun archivo en especifico')
         action = input("Que deseas hacer? I.Iniciar sesion, R.Registrar usuario =>").upper()
         if action == 'I':
             newUser = user()
@@ -71,9 +71,22 @@ if __name__ == '__main__':
                 print(respuesta['message'])
             if respuesta['errors'] == False:
                 userLogged = newUser
-                os.system('mkdir repositorio/'+userLogged.username)
-                os.system('mkdir repositorio/'+userLogged.username+'/permanente')
-                os.system('mkdir repositorio/' + userLogged.username + '/temporal')
-                os.system('mkdir repositorio/' + userLogged.username + '/permanente/commits')
+                nombreCarpeta = input('Digite el nombre de la carpeta=>')
+                carpeta = os.system('cd repositorio/'+nombreCarpeta)
+                if carpeta == 512:
+                    os.system('mkdir repositorio/' + nombreCarpeta)
+                    os.system('mkdir repositorio/' + nombreCarpeta + '/permanente')
+                    os.system('mkdir repositorio/' + nombreCarpeta + '/temporal')
+                    os.system('mkdir repositorio/' + nombreCarpeta + '/permanente/commits')
+                if carpeta == 0:
+                    while carpeta == 0:
+                        nombreCarpeta = input('Ya existe una carpeta con ese nombre, digite otro=>')
+                        carpeta = os.system('cd repositorio/' + nombreCarpeta)
+                        if carpeta == 512:
+                            os.system('mkdir repositorio/' + nombreCarpeta)
+                            os.system('mkdir repositorio/' + nombreCarpeta + '/permanente')
+                            os.system('mkdir repositorio/' + nombreCarpeta + '/temporal')
+                            os.system('mkdir repositorio/' + nombreCarpeta + '/permanente/commits')
+
 
 
