@@ -10,6 +10,14 @@ class user:
         self.username = ''
         self.password = ''
 
+class folder:
+    def __init__(self):
+        self.name = ''
+        self.repoUserId = ''
+        self.edit = True
+        self.view = True
+        self.delete = True
+        self.add = True
 
 
 if __name__ == '__main__':
@@ -17,19 +25,11 @@ if __name__ == '__main__':
     repos = os.system('cd repositorio')
     if repos == 512:
         os.system('mkdir repositorio')
-        # print('Aun no existe un carpeta para los repositorios, por favor cree uno :)')
-        # newUser = user()
-        # newUser.username = input("Ingrese un nombre de usuario")
-        # newUser.password = input("Ingrese una contrasena")
-        # data = requests.post(api_url_base + '/repoUsers/createUser', data={'username': newUser.username, 'password': newUser.password})
-        # respuesta = data.json()
-        # if respuesta['errors'] == True:
-        #     print(respuesta['message'])
-        # if respuesta['errors'] == False:
-        #     os.system('mkdir repositorio')
-        #     os.system('sudo useradd -m yesy') #+ newUser.username + ' -p ' + newUser.password)
-        #     # os.system('icacls "/repositorio" /grant Users:' + newUser.username)
-        #     repos = 0
+        newUser = user()
+        newUser.username = input("Ingrese un nombre del super usuario:")
+        newUser.password = input("Ingrese una contrasena:")
+        data = requests.post(api_url_base + '/repoUsers/createUser',
+                             data={'username': newUser.username, 'password': newUser.password, 'superUser': True})
     while True:
 
         print("Bienvenido al sistema de repos", userLogged.username)
@@ -87,6 +87,7 @@ if __name__ == '__main__':
                             os.system('mkdir repositorio/' + nombreCarpeta + '/permanente')
                             os.system('mkdir repositorio/' + nombreCarpeta + '/temporal')
                             os.system('mkdir repositorio/' + nombreCarpeta + '/permanente/commits')
-
+                # data = requests.post(api_url_base + '/folders/addFolder',
+                #                      data={'name': nombreArchivo, 'repoUserId': respuesta['value'].id})
 
 
