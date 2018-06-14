@@ -48,7 +48,7 @@ if __name__ == '__main__':
                     print('Carpetas: ')
                     os.system('ls repositorio/')
                 if action == 'A':
-                    data = requests.get(api_url_base + '/repoUsers/getUsers', headers=headers)
+                    data = requests.get(api_url_base + '/repoUsers/getUsers')
                     respuesta = data.json()
                     print('USUARIOS: ')
                     print(respuesta['response'])
@@ -60,7 +60,7 @@ if __name__ == '__main__':
                     edit = input('Puede editar 1.True o 2.False')
                     add = input('Puede agregar? 1.True o 2.False')
                     view = input('Puede ver? 1.True o 2.False')
-                    data = requests.post(api_url_base + '/folders/addFolder', data={'name': folderName, 'username': userLogged.username, 'delete': delete, 'edit': edit, 'add': add, 'view': view})
+                    data = requests.post(api_url_base + '/folders/addFolder', data={'name': folderName, 'username': username, 'delete': delete, 'edit': edit, 'add': add, 'view': view})
 
 
             if userLogged.superAdmin == False:
@@ -74,25 +74,39 @@ if __name__ == '__main__':
                 if respuesta['errors'] == True:
                     print('No tienes permisos para gestionar esta carpeta')
                 if respuesta['errors'] == False:
-
+                    print('Que deseas hacer?')
                     if respuesta['response']['delete'] == True:
-                        print('')
-                    action = input("Que desea hacer? U.Update V.Ver C.Commit A.Asignar usuario E.Eliminar C.Cerrar sesion A.Agregar M.Modificar=>").upper()
+                        print('E.Eliminar')
+                    if respuesta['response']['add'] == True:
+                        print('A.Agregar')
+                    if respuesta['response']['edit'] == True:
+                        print('M.Modificar')
+                    if respuesta['response']['view'] == True:
+                        print('E.Ver')
+                    print('CS.Cerrar sesion, C.Commit U.update')
+                    action = input("Seleccione una opcion=>").upper()
+
                     if action == 'V':
-                        os.system('ls repositorio/' + userLogged.username + '/temporal/')
+                        os.system('ls repositorio/' + respuesta['response']['name'] + '/temporal/')
                         nombreArchivo = input('Cual archivo desea ver? => ')
-                        os.system('cat repositorio/' + userLogged.username + '/temporal/' + nombreArchivo)
-                    if action == 'C':
+                        os.system('cat repositorio/' + respuesta['response']['name'] + '/temporal/' + nombreArchivo)
+                    if action == 'CS':
                         userLogged.username = ''
+                    if action == 'E':
+                        os.system('ls repositorio/' + respuesta['response']['name'] + '/temporal/')
+                        nombreArchivo = input('Cual archivo desea eliminar? => ')
+                        os.system('rm -f repositorio/' + respuesta['response']['name'] + '/temporal/'+nombreArchivo)
                     if action == 'M':
-                        os.system('ls repositorio/' + userLogged.username + '/temporal/')
+                        os.system('ls repositorio/' + respuesta['response']['name'] + '/temporal/')
                         nombreArchivo = input('Cual archivo desea modificar? => ')
-                        os.system('edit repositorio/' + userLogged.username + '/temporal/'+nombreArchivo)
+                        os.system('edit repositorio/' + respuesta['response']['name'] + '/temporal/'+nombreArchivo)
                     if action == 'A':
                         nombreArchivo = input("Digite el nombre del nuevo archivo=>")
-                        os.system('touch repositorio/' + userLogged.username + '/temporal/'+nombreArchivo+'.txt')
+                        os.system('touch repositorio/' + respuesta['response']['name'] + '/temporal/'+nombreArchivo+'.txt')
                     if action == 'U':
-                        tipo = input('1.Restaurar toda la capeta 2.Algun archivo en especifico')
+                        os.system('cp -a repositorio/' + respuesta['response']['name'] + '/permanente/. repositorio/'+respuesta['response']['name']+ '/temporal')
+                    if action == 'C':
+                        os.system('cp -a repositorio/' + respuesta['response']['name'] + '/temporal/. repositorio/'+respuesta['response']['name'] + '/permanente')
 
 
         action = input("Que deseas hacer? I.Iniciar sesion, R.Registrar usuario =>").upper()
